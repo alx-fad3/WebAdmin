@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewBag.Title = "Diagrams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <div class="row">
+        <div class="col-md-10">
+            <canvas id="chart" style="display: block; width: 1012px; height: 506px;" width="1012" height="506" class="chartjs-render-monitor"></canvas>
+        </div>
+    </div>
+    <br>
+    <br>
+    <button id="randomizeData">Randomize Data</button>
+    <button id="addDataset">Add Dataset</button>
+    <button id="removeDataset">Remove Dataset</button>
+    <button id="addData">Add Data</button>
+    <button id="removeData">Remove Data</button>
+
+    <script>
+        var colors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        var context = document.querySelector('#chart').getContext('2d');
+        //context.canvas.width = 600;
+        //context.canvas.height = 300;
+
+        var minDate = new Date();
+        minDate.setDate(minDate.getDate() - 30);
+        var maxDate = new Date();
+
+        class ChartDataset {
+            constructor(label, borderColor, data, fill = false) {
+                this.label = label;
+                this.borderColor = borderColor;
+                this.fill = fill;
+                this.data = data;
+            };
+        
+            createDataset() {
+                return {
+                    label: this.label,
+                    borderColor: this.borderColor,
+                    fill: this.fill,
+                    data: this.data
+                }
+            }
+        };
+
+        class ChartDatasetFabric {
+            constructor(dataArray) {
+                this.dataArray = dataArray;
+            };
+
+            generateDatasets() {
+                var datasets = new Array();
+                for (index = 0; index < this.dataArray; index++) {
+                    datasets[index] = new ChartDataset(this.dataArray[index]);
+                }
+                return datasets;
+            }
+        }
+
+        class DateChart {
+            constructor(chartType, datasets, canvasId, minDate, maxDate) {
+                this.chartType = chartType;
+                this.datasets = datasets;
+                this.canvasId = canvasId;
+                this.minDate = minDate;
+                this.maxDate = maxDate;
+            };
+
+            _checkDates() {
+                if (typeof this.minDate == 'undefined') {
+                    this.minDate = new Date();
+                    this.minDate.setDate(this.minDate.getDate() - 30);
+                }
+                if (typeof this.maxDate == 'undefined') {
+                    this.maxDate = new Date();
+                }
+            }
+            
+            createChart() {
+                this._checkDates();
+                var context = document.querySelector(this.canvasId).getContext('2d');
+                var config = {
+                    type: this.type,
+                    data: {
+                        datasets: this.datasets
+                    },
+                    options: {
+                        legend: false,
+                        scales: {
+                            xAxes: [{
+                                type: 'time',
+                                time: {
+                                    min: this.minDate,
+                                    max: this.maxDate,
+                                    unit: 'day'
+                                }
+                            }]
+                        }
+                    }
+                };
+                return new Chart(context, config);
+            };
+        };
+
+        var config = {
+            type: 'line',
+            data: {
+                datasets: [
+                    {
+                        label: 'data1',
+                        borderColor: colors.blue,
+                        //backgroundColor: colors.blue,
+                        fill: false,
+                        data: [
+                            { x: '2020-03-31', y: 50 },
+                            { x: '2020-04-05', y: 40 },
+                            { x: '2020-04-08', y: 62 },
+                            { x: '2020-04-16', y: 58 },
+                            { x: '2020-04-17', y: 90 },
+                        ],
+                    },
+                    {
+                        label: 'data2',
+                        borderColor: colors.red,
+                        //backgroundColor: colors.red,
+                        fill: false,
+                        data: [
+                            { x: '2020-03-31', y: 40 },
+                            { x: '2020-04-05', y: 35 },
+                            { x: '2020-04-08', y: 20 },
+                            { x: '2020-04-16', y: 70 },
+                            { x: '2020-04-17', y: 40 },
+                        ],
+                    },]
+            },
+            options: {
+                legend: false,
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            min: minDate,
+                            max: maxDate,
+                            unit: 'day'
+                        }
+                    }]
+                }
+            }
+        };
+        var chart = new Chart(context, config);
+    </script>
+   

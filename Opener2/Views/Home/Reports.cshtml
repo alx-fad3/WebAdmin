@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Reports";
+}
+<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5">
+            <label for="halvaForm">Отчеты </label>
+            <form action="/Home/Reports" method="post" id="halvaForm">
+                <div class="form-check">
+                    <label class="form-check-label" for="npfForm">Фонд:</label>
+                    <select class="form-control" id="npfForm" name="npf">
+                        <option value=""></option>
+                        <option value="halva">Халва</option>
+                        <option value="gaz">Газфонд</option>
+                        <option value="saf">Сафмар</option>
+                        <option value="naz">Национальный</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="datetime1">От: </label>
+                    <input input id="datetime1" type="date" class="form-control" name="date1">
+                    <label for="datetime2">До: </label>
+                    <input input id="datetime2" type="date" class="form-control" name="date2" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Go</button>
+                        <br />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

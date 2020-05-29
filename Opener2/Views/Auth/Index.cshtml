@@ -1,0 +1,41 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTyPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Login</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <br />
+    <div class="container">
+        <div class="row" >
+            <div class="col-sm-5">
+                <form action="/Auth/Login" method="post" id="authForm">
+                    <div class="form-group">
+                        <label for="login">Логин:</label>
+                        <input type="text" class="form-control" id="login" placeholder="Login" name="login" autocomplete="off">
+                        <label for="pass">Пароль:</label>
+                        <input type="password" class="form-control" id="pass" placeholder="Password" name="pass" autocomplete="off">
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">Go</button>
+                            <br />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+</body>
+</html>

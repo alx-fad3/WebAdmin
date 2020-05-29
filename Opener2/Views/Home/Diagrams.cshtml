@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "Diagrams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div class="row">
+        <h2>Диаграммы</h2>
+        <br/>
+    </div>
+    <div class="row">
+        <div class="col-md-10">
+            <canvas id="chart" style="display: block; width: 1012px; height: 506px;" width="1012" height="506" class="chartjs-render-monitor"></canvas>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <button id="change">Change Type</button>
+    <button id="refresh">Refresh</button>
+    
+    <script src="~/Scripts/MyCharts.js" type="text/javascript"></script>
+    <script>
+        var colors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        var testData = @Html.Raw(ViewBag.dataArray);
+        var generator = new ChartDatasetGenerator(@Html.Raw(ViewBag.dataArray));
+        var datasets = generator.generateDatasets();
+        @*var d1 = @ViewBag.d1;
+        var d2 = @ViewBag.d2;*@
+
+        var d1 = "2020-04-29";
+        var d2 = "2020-05-29";
+        var chart1 = new DateChart('line', datasets, '#chart');
+        var c = chart1.createChart();
+
+        document.getElementById('change').addEventListener('click', function () {
+            var chart1 = new DateChart('bar', datasets, '#chart', new Date(@ViewBag.d1), new Date(@ViewBag.d2));
+            var c = chart1.createChart();
+        });
+
+        document.getElementById('refresh').addEventListener('click', function () {
+            var generator = new ChartDatasetGenerator(dataArray1);
+            var datasets = generator.generateDatasets();
+            var chart1 = new DateChart('line', datasets, '#chart');
+            var c = chart1.createChart();
+        });
+        var testA;
+
+        function ajaxTest() {
+            var url = 'https://localhost:44389/Home/ajaxTest';
+            var request = new XMLHttpRequest();
+            request.open('GET', url);
+            request.responseType = 'json';
+
+            request.onload = function () {
+                testA = request.response;
+            };
+
+            request.send();
+        }
+    </script>
+   

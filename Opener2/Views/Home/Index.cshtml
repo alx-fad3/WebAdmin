@@ -1,0 +1,79 @@
+﻿@{
+    ViewBag.Title = "Agreements";
+}
+
+<br />
+<div class="container">
+
+    <div class="row">
+
+        <div class="col-sm-5">
+            <form action="/Home/Index" method="post">
+                <div class="form-group">
+                    <label for="snils">СНИЛС:</label>
+                    <input type="text" class="form-control" id="snils" placeholder="Enter snils" name="snils">
+                    <small class="form-text text-muted">@ViewBag.error</small>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="dateCheck" name="dateCheck" value="true">
+                            <label class="form-check-label" for="dateCheck">Обновить дату</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-5">
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="statusCheck" name="statusCheck" value="true">
+                            <label class="form-check-label" for="statusCheck">Обновить статус</label>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-10">
+                        <div class="form-check">
+                            <label class="form-check-label" for="npfForm">Сменить фонд на:</label>
+                            <select class="form-control" id="npfForm" name="npf">
+                                <option value=""></option>
+                                <option value="gaz">Газфонд</option>
+                                <option value="saf">Сафмар</option>
+                                <option value="naz">Национальный</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <label for="snils">Сменить агента на:</label>
+                    <input type="text" class="form-control" id="snils" placeholder="Username" name="username">
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-sm-5">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Go</button>
+                        <br />
+                    </div>
+                    <div class="col-sm-5">
+                        <button type="reset" class="btn btn-danger btn-lg btn-block">Clear</button>
+                        <br />
+                    </div>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-sm-5">
+            <label for="agrListed">Info:</label>
+            @if (ViewBag.agrList != null)
+            {
+                <ul class="list-group" id="agrListed">
+                    @foreach (var s in ViewBag.agrlist)
+                    {
+                        <li class="list-group-item">@s</li>
+                    }
+                </ul>
+            }
+        </div>
+
+    </div>
+
+</div>

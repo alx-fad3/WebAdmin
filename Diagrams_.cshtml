@@ -1,0 +1,176 @@
+﻿
+@{
+    ViewBag.Title = "Diagrams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+    <div class="row">
+        <div class="col-md-10">
+            <canvas id="canvas" style="display: block; width: 1012px; height: 506px;" width="1012" height="506" class="chartjs-render-monitor"></canvas>
+        </div>
+    </div>
+    <br>
+    <br>
+    <button id="randomizeData">Randomize Data</button>
+    <button id="addDataset">Add Dataset</button>
+    <button id="removeDataset">Remove Dataset</button>
+    <button id="addData">Add Data</button>
+    <button id="removeData">Remove Data</button>
+
+    <script>
+        function randomChoice(data) {
+            var len = Object.keys(data).length;
+            var index = Math.floor(Math.random() * len - 1);
+            return data[index];
+        };
+
+        var colors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
+        var data1 = @ViewBag.arr;
+        var data2 = @ViewBag.arr2;
+        var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var currentMonth = MONTHS[new Date().getMonth()];
+        console.log(currentMonth);
+        var config = {
+            type: 'line',
+            data: {
+                labels: ['February', 'March', 'April'],
+                datasets: [{
+                    label: 'data1',
+                    backgroundColor: colors.blue,
+                    borderColor: colors.blue,
+                    data: data1,
+                    fill: false,
+                }, {
+                    label: 'data2',
+                        fill: false,
+                        backgroundColor: colors.red,
+                        borderColor: colors.red,
+                    data: data2,
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Test chart'
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+                elements: {
+                    point: {
+                        pointStyle: 'circle'
+                        /*
+                         'circle',
+				        'triangle',
+				        'rect',
+				        'rectRounded',
+				        'rectRot',
+				        'cross',
+				        'crossRot',
+				        'star',
+				        'line',
+				        'dash'
+                         */
+                    }
+                },
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Month'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Value'
+                        }
+                    }]
+                }
+            }
+        };
+
+        window.onload = function () {
+            var ctx = document.getElementById('canvas').getContext('2d');
+            window.myLine = new Chart(ctx, config);
+        };
+
+        document.getElementById('randomizeData').addEventListener('click', function () {
+            config.data.datasets.forEach(function (dataset) {
+                dataset.data = dataset.data.map(function () {
+                    return randomScalingFactor();
+                });
+
+            });
+
+            window.myLine.update();
+        });
+
+        var colorNames = Object.keys(window.chartColors);
+        document.getElementById('addDataset').addEventListener('click', function () {
+            var colorName = colorNames[config.data.datasets.length % colorNames.length];
+            var newColor = window.chartColors[colorName];
+            var newDataset = {
+                label: 'Dataset ' + config.data.datasets.length,
+                backgroundColor: newColor,
+                borderColor: newColor,
+                data: [],
+                fill: false
+            };
+
+            for (var index = 0; index < config.data.labels.length; ++index) {
+                newDataset.data.push(randomScalingFactor());
+            }
+
+            config.data.datasets.push(newDataset);
+            window.myLine.update();
+        });
+
+        document.getElementById('addData').addEventListener('click', function () {
+            if (config.data.datasets.length > 0) {
+                var month = MONTHS[config.data.labels.length % MONTHS.length];
+                config.data.labels.push(month);
+
+                config.data.datasets.forEach(function (dataset) {
+                    dataset.data.push(randomScalingFactor());
+                });
+
+                window.myLine.update();
+            }
+        });
+
+        document.getElementById('removeDataset').addEventListener('click', function () {
+            config.data.datasets.splice(0, 1);
+            window.myLine.update();
+        });
+
+        document.getElementById('removeData').addEventListener('click', function () {
+            config.data.labels.splice(-1, 1); // remove the label first
+
+            config.data.datasets.forEach(function (dataset) {
+                dataset.data.pop();
+            });
+
+            window.myLine.update();
+        });
+
+    </script>
+   
